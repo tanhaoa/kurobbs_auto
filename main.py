@@ -30,14 +30,14 @@ def generate_random_private_ip():
     
     return ".".join(ip_parts)
 
-class kurobbs_request():
+class kurobbs_request:
     async def __aenter__(self):
         return self
     
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.rq.close()
 
-    def __init__(self, DID=None, TOKEN=None, BAT=None):
+    def __init__(self, DID:str=None, TOKEN:str=None, BAT:str=None):
         self.DID =  DID if DID != None else os.getenv("DID")
         self.TOKEN = TOKEN if TOKEN != None else os.getenv("TOKEN")
         self.BAT = BAT if BAT != None else os.getenv("BAT")
@@ -96,7 +96,7 @@ class kurobbs_request():
             return await res.json()
  
     async def do_like(
-        self, postId, toUserId
+        self, postId: str|int, toUserId: str|int
     ):
         """
         通用论坛点赞
@@ -155,23 +155,23 @@ class kurobbs_request():
             return await res.json()
 
     async def get_form_list(self):
-            """
-            取帖子列表
-            https://github.com/TomyJan/Kuro-API-Collection/blob/master/API/forum/list.md
-            """
-            headers = {"version": "2.25"}
-            data = {
-                "pageIndex": "1",
-                "pageSize": "20",
-                "timeType": "0",
-                "searchType": "1",
-                "forumId": "9",
-                "gameId": "3",
-            }
-            async with self.rq.post(FORUM_LIST_URL, headers=headers, data=data) as res:
-                return await res.json()
+        """
+        取帖子列表
+        https://github.com/TomyJan/Kuro-API-Collection/blob/master/API/forum/list.md
+        """
+        headers = {"version": "2.25"}
+        data = {
+            "pageIndex": "1",
+            "pageSize": "20",
+            "timeType": "0",
+            "searchType": "1",
+            "forumId": "9",
+            "gameId": "3",
+        }
+        async with self.rq.post(FORUM_LIST_URL, headers=headers, data=data) as res:
+            return await res.json()
 
-    async def get_notLike_list(self, num=5):
+    async def get_notLike_list(self, num: int=5):
         """
         获取num个未点赞的帖子信息
         return [{postId: ..., userId: ...}]
